@@ -1,0 +1,26 @@
+<?php
+
+// Проверка, что приложение запущено из CLI
+if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+    exit('This script can only be run from the command line.');
+}
+
+// Подгрузка autoloader
+require __DIR__.'/../vendor/autoload.php';
+
+// Создание приложения
+$app = require_once __DIR__.'/app.php';
+
+// Создание kernel
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+// Обработка входящего запроса
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+// Завершение
+$kernel->terminate($input, $status);
+
+exit($status);
