@@ -1,27 +1,16 @@
 <?php
 
-use Illuminate\Contracts\Http\Kernel;
+require __DIR__ . '/../vendor/autoload.php';
+
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
-// Определение времени начала загрузки
-define('LARAVEL_START', microtime(true));
+// Initialize Laravel application
+$app = require_once __DIR__ . '/../app.php';
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-// Проверка, что приложение запущено из веб-сервера
-if (PHP_SAPI === 'cli') {
-    exit('This script must be run from a web server.');
-}
-
-// Автозагрузка
-require __DIR__.'/../vendor/autoload.php';
-
-// Создание приложения
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-// Обработка входящего запроса
-$kernel = $app->make(Kernel::class);
-
-$response = $kernel->handle(
-    $request = Request::capture()
-)->send();
+$request = Request::capture();
+$response = $kernel->handle($request);
+$response->send();
 
 $kernel->terminate($request, $response);

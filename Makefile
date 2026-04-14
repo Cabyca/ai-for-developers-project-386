@@ -1,4 +1,4 @@
-.PHONY: install dev build test clean
+.PHONY: install dev build start test clean help
 
 install: ## Установка зависимостей (backend → frontend, последовательно)
 	@echo "Installing backend dependencies..."
@@ -6,14 +6,21 @@ install: ## Установка зависимостей (backend → frontend, �
 	@echo "Installing frontend dependencies..."
 	cd frontend && npm ci
 
-dev: ## Запуск dev-серверов параллельно
+dev: ## Запуск dev-серверов параллельно (Laravel + Vite)
 	@echo "Starting Laravel server on port 8000..."
 	@php backend/artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
+	@echo "Laravel API: http://localhost:8000"
 	@echo "Starting Vite dev server..."
 	@cd frontend && npm run dev
 
 build: ## Сборка Docker-образа
 	docker build -t calendar-app .
+
+start: ## Сборка и запуск Docker-контейнера локально (финальная проверка)
+	@echo "Building Docker image..."
+	@docker build -t calendar-app .
+	@echo "Starting container on http://localhost:8000"
+	@docker run -p 8000:8000 -e PORT=8000 calendar-app
 
 test: ## Запуск всех тестов (backend → frontend)
 	@echo "Running Laravel tests..."

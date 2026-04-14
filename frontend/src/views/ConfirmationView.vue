@@ -7,15 +7,19 @@ import { useBookingState } from '../composables/useBookingState.js'
 import { createBooking } from '../api/endpoints/bookings.js'
 
 const router = useRouter()
-const { 
-  state, 
-  setGuestData, 
-  setSubmitting, 
+const {
+  state,
+  setGuestData,
+  touchField,
+  touchAllFields,
+  setSubmitting,
   setError,
   reset,
   hasEventType,
   hasSelectedSlot,
+  isFormValid,
   canSubmit,
+  getFieldError,
   getBookingPayload
 } = useBookingState()
 
@@ -41,14 +45,17 @@ const handleBack = () => {
 }
 
 const handleSubmit = async () => {
+  // Touch all fields to show validation errors
+  touchAllFields()
+
   if (!canSubmit.value) return
-  
+
   const payload = getBookingPayload()
   if (!payload) return
-  
+
   setSubmitting(true)
   submitError.value = null
-  
+
   try {
     await createBooking(payload)
     // Success - go to success page
@@ -64,6 +71,20 @@ const handleSubmit = async () => {
   } finally {
     setSubmitting(false)
   }
+}
+
+// Get hint message for inactive button
+const getSubmitButtonHint = () => {
+  if (!hasEventType.value) return 'Выберите тип встречи'
+  if (!hasSelectedSlot.value) return 'Выберите дату и время'
+  if (!isFormValid.value) {
+    const nameError = getFieldError('guestName')
+    const emailError = getFieldError('guestEmail')
+    if (nameError) return nameError
+    if (emailError) return emailError
+    return 'Заполните все обязательные поля'
+  }
+  return null
 }
 </script>
 
@@ -89,9 +110,13 @@ const handleSubmit = async () => {
           :guest-name="state.guestName"
           :guest-email="state.guestEmail"
           :comment="state.comment"
-          @update:guest-name="state.guestName = $event"
-          @update:guest-email="state.guestEmail = $event"
-          @update:comment="state.comment = $event"
+          :name-error="getFieldError('guestName')"
+          :email-error="getFieldError('guestEmail')"
+          @update:guest-name="setGuestData({ guestName: $event })"
+          @update:guest-email="setGuestData({ guestEmail: $event })"
+          @update:comment="setGuestData({ comment: $event })"
+          @blur:guest-name="touchField('guestName')"
+          @blur:guest-email="touchField('guestEmail')"
           @submit="handleSubmit"
         />
         
@@ -108,7 +133,7 @@ const handleSubmit = async () => {
           >
             Назад
           </button>
-          
+
           <button
             @click="handleSubmit"
             :disabled="!canSubmit || state.isSubmitting"
@@ -117,6 +142,11 @@ const handleSubmit = async () => {
             {{ state.isSubmitting ? 'Создание...' : 'Подтвердить' }}
           </button>
         </div>
+
+        <!-- Hint for inactive button -->
+        <p v-if="!canSubmit && !state.isSubmitting" class="mt-2 text-sm text-gray-500 text-center">
+          {{ getSubmitButtonHint() }}
+        </p>
       </div>
     </div>
   </div>

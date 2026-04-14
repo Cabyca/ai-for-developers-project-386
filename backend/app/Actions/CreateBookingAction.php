@@ -3,10 +3,17 @@
 namespace App\Actions;
 
 use App\Models\Booking;
+use App\Models\EventType;
 use App\Services\BookingService;
 
 /**
  * Action: Создание бронирования
+ * 
+ * Бизнес-правила:
+ * - Проверка существования EventType
+ * - Автоматический расчет endsAt на основе durationMinutes
+ * - Глобальная проверка доступности (409 Conflict если занято)
+ * - Возврат созданного бронирования или ошибки конфликта
  */
 class CreateBookingAction
 {
@@ -31,12 +38,45 @@ class CreateBookingAction
         string $guestEmail,
         ?string $comment = null
     ): array {
-        // TODO: Реализовать:
-        // 1. Получение EventType и проверку существования
-        // 2. Расчет endsAt
-        // 3. Проверку доступности слота
-        // 4. Создание бронирования или возврат ошибки 409
-        
-        return ['booking' => new Booking()]; // Заглушка
+        // Делегируем создание бронирования в BookingService
+        $result = $this->bookingService->createBooking(
+            $eventTypeId,
+            $startsAt,
+            $guestName,
+            $guestEmail,
+            $comment
+        );
+
+        // Если есть ошибка — возвращаем как есть (контроллер превратит в 409)
+        if (isset($result['error'])) {
+            return $result;
+        }
+
+        // Возвращаем успешно созданное бронирование
+        return $result;
+    }
+
+    /**
+     * Получить детали бронирования для ответа API
+     *
+     * @param Booking $booking
+     * @return array
+     */
+    public function formatBookingResponse(Booking $booking): array
+    {
+        return [
+            'id' => $booking->id,
+            'eventTypeId' => $booking->eventTypeId,
+            'startsAt' => $booking->startsAt->toIso8601String(),
+            'guestName' => $booking->guestName,
+            'guestEmail' => $booking->guestEmail,
+            'comment' => $booking->comment,
+            'eventType' => $booking->eventType ? [
+                'id' => $booking->eventType->id,
+                'title' => $booking->eventType->title,
+                'description' => $booking->eventType->description,
+                'durationMinutes' => $booking->eventType->durationMinutes,
+            ] : null,
+        ];
     }
 }

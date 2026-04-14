@@ -3,17 +3,12 @@
 namespace App\Actions;
 
 use App\Models\EventType;
-use App\Services\SlotService;
 
 /**
  * Action: Создание типа события
  */
 class CreateEventTypeAction
 {
-    public function __construct(
-        private SlotService $slotService
-    ) {}
-
     /**
      * Выполнить создание типа события
      *
@@ -21,14 +16,22 @@ class CreateEventTypeAction
      * @param string $description Описание
      * @param int $durationMinutes Длительность (15 или 30)
      * @return EventType
+     * @throws \InvalidArgumentException Если durationMinutes не 15 или 30
      */
     public function execute(string $title, string $description, int $durationMinutes): EventType
     {
-        // TODO: Реализовать:
-        // 1. Валидацию durationMinutes (только 15 или 30)
-        // 2. Создание записи в БД
-        // 3. Возврат созданного EventType
-        
-        return new EventType(); // Заглушка
+        // Валидация durationMinutes (только 15 или 30)
+        if (!in_array($durationMinutes, [15, 30], true)) {
+            throw new \InvalidArgumentException('Duration must be 15 or 30 minutes');
+        }
+
+        // Создание записи в БД
+        $eventType = EventType::create([
+            'title' => $title,
+            'description' => $description,
+            'durationMinutes' => $durationMinutes,
+        ]);
+
+        return $eventType;
     }
 }

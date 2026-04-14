@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
-import { formatDateForApi, dayjs } from './src/utils/date.js'
 
-// Mock data
+// DEVELOPMENT MOCKS - закомментированы для production
+// Раскомментируйте для локальной разработки без бэкенда
+/*
+import { dayjs } from './src/utils/date.js'
+
 const mockEventTypes = [
   {
     id: 'mock-uuid-15',
@@ -43,10 +46,13 @@ function generateMockSlots(eventTypeId, date, durationMinutes) {
   
   return slots
 }
+*/
 
 export default defineConfig({
   plugins: [
     vue(),
+    // DEVELOPMENT MOCKS - закомментированы для production
+    /*
     {
       name: 'api-mocks',
       configureServer(server) {
@@ -111,6 +117,7 @@ export default defineConfig({
         })
       }
     }
+    */
   ],
   root: '.',
   build: {
@@ -122,7 +129,15 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5173,
+    // Прокси API-запросов на Laravel бэкенд (только для dev)
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   },
   resolve: {
     alias: {
