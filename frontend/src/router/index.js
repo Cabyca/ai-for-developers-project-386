@@ -46,6 +46,14 @@ const routes = [
       step: 4
     }
   },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../views/AdminView.vue'),
+    meta: { 
+      title: 'Админ-панель'
+    }
+  },
   // Fallback route
   {
     path: '/:pathMatch(.*)*',

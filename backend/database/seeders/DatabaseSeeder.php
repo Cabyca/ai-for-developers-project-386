@@ -18,22 +18,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Создаем тип события на 15 минут
-        EventType::firstOrCreate(
-            ['durationMinutes' => 15],
-            [
+        // Создаем дефолтные типы только если таблица пуста
+        if (EventType::count() === 0) {
+            EventType::create([
                 'title' => 'Встреча 15 минут',
                 'description' => 'Короткий звонок для быстрого обсуждения вопросов.',
-            ]
-        );
+                'durationMinutes' => 15,
+            ]);
 
-        // Создаем тип события на 30 минут
-        EventType::firstOrCreate(
-            ['durationMinutes' => 30],
-            [
+            EventType::create([
                 'title' => 'Встреча 30 минут',
                 'description' => 'Полноценная консультация с детальным разбором ситуации.',
-            ]
-        );
+                'durationMinutes' => 30,
+            ]);
+        }
     }
 }

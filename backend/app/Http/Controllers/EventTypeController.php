@@ -6,6 +6,7 @@ use App\Models\EventType;
 use App\Actions\CreateEventTypeAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Контроллер типов событий
@@ -18,8 +19,16 @@ class EventTypeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $eventTypes = EventType::all();
-        return response()->json($eventTypes);
+        try {
+            $eventTypes = EventType::all();
+            return response()->json($eventTypes);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch event types', ['error' => $e->getMessage()]);
+            return response()->json([
+                'code' => 'FETCH_ERROR',
+                'message' => 'Не удалось получить список типов событий',
+            ], 500);
+        }
     }
 
     /**
@@ -34,12 +43,22 @@ class EventTypeController extends Controller
             'durationMinutes' => 'required|integer|in:15,30',
         ]);
 
-        $eventType = $action->execute(
-            $validated['title'],
-            $validated['description'],
-            $validated['durationMinutes']
-        );
+        try {
+            $eventType = $action->execute(
+                $validated['title'],
+                $validated['description'],
+                $validated['durationMinutes']
+            );
 
-        return response()->json($eventType, 201);
+            return response()->json($eventType, 201);
+        } catch (\Exception $e) {
+            Log::error('EventType creation error: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            
+            return response()->json([
+                'code' => 'CREATE_ERROR',
+                'message' => 'Ошибка при создании типа события: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
