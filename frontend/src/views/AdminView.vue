@@ -42,11 +42,25 @@ const loadBookings = async () => {
     isLoadingBookings.value = true
     bookingsError.value = null
     const data = await getBookings()
+
+    // Убедимся, что данные - это массив
+    const bookingsArray = Array.isArray(data) ? data : []
+
     // Sort by date, newest first
-    bookings.value = data.sort((a, b) => new Date(b.startsAt) - new Date(a.startsAt))
+    bookings.value = bookingsArray.sort((a, b) => new Date(b.startsAt) - new Date(a.startsAt))
   } catch (err) {
-    bookingsError.value = 'Не удалось загрузить бронирования'
+    // Только при реальной ошибке (4xx/5xx или сетевой сбой) показываем ошибку
+    // Пустой массив [] от API - это успех, не ошибка
     console.error('Failed to load bookings:', err)
+
+    // Проверяем, есть ли response (значит ошибка от сервера)
+    // или это сетевой сбой (нет response)
+    if (err.response || err.code === 'NETWORK_ERROR' || err.code === 'ECONNABORTED') {
+      bookingsError.value = 'Не удалось загрузить бронирования. Проверьте подключение к серверу.'
+    } else {
+      // Если ошибка не связана с API/сетью, просто пустой список
+      bookings.value = []
+    }
   } finally {
     isLoadingBookings.value = false
   }
@@ -106,6 +120,13 @@ const formatDuration = (minutes) => {
 // Check if booking is in the future
 const isUpcoming = (startsAt) => {
   return dayjs(startsAt).isAfter(dayjs())
+}
+
+// Get event title by ID from loaded eventTypes
+const getEventTitle = (eventTypeId) => {
+  if (!eventTypeId) return 'Тип не определен'
+  const eventType = eventTypes.value.find(et => et.id === eventTypeId)
+  return eventType?.title || 'Тип не определен'
 }
 
 onMounted(() => {
@@ -253,8 +274,9 @@ onMounted(() => {
           </button>
         </div>
 
-        <div v-else-if="bookings.length === 0" class="text-center py-8 text-gray-500">
-          Пока нет бронирований
+        <div v-else-if="bookings.length === 0" class="text-center py-8">
+          <div class="text-gray-500 mb-2">Бронирований пока нет.</div>
+          <div class="text-gray-400 text-sm">Создайте первый тип события и запишитесь!</div>
         </div>
 
         <div v-else class="space-y-4 max-h-[600px] overflow-y-auto">
@@ -288,7 +310,7 @@ onMounted(() => {
               <p class="text-sm">
                 <span class="text-gray-500">Тип:</span>
                 <span class="font-medium text-gray-900">
-                  {{ booking.eventType?.title || 'Неизвестно' }}
+                  {{ getEventTitle(booking.eventTypeId) }}
                 </span>
               </p>
               <p class="text-sm">
