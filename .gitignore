@@ -1,4 +1,5 @@
 # Dependencies
+/vendor/
 node_modules/
 backend/vendor/
 frontend/node_modules/
@@ -82,3 +83,6 @@ frontend/playwright/.cache/
 composer.phar
 backend/composer.phar
 session-ses_*.md
+
+# Symlinks
+/vendor

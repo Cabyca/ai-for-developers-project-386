@@ -28,7 +28,11 @@ test: ## Запуск всех тестов (backend → frontend)
 	@echo "Running Playwright tests..."
 	cd frontend && npx playwright test
 
-init-db: ## Инициализация SQLite базы данных (создание файла + права + миграции)
+init-db: ## Инициализация SQLite базы данных (composer dump-autoload + создание файла + права + миграции)
+	@echo "Refreshing composer autoload..."
+	cd backend && composer dump-autoload
+	@echo "✓ Autoload refreshed"
+	@echo ""
 	@echo "Checking database directory and file..."
 	@if [ ! -d backend/database ]; then \
 		echo "Creating backend/database directory..."; \
