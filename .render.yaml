@@ -1,0 +1,41 @@
+# Render.com Configuration
+# This file configures the deployment of the Calendar App
+
+services:
+  - type: web
+    name: calendar-app
+    runtime: docker
+    repo: https://github.com/yourusername/calendar-app
+    branch: main
+    # Docker build configuration
+    dockerfilePath: Dockerfile
+    # Health check path
+    healthCheckPath: /api/health
+    # Environment variables
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: CACHE_DRIVER
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+    # Persistent disk for SQLite database
+    disk:
+      name: calendar-data
+      mountPath: /app/storage
+      sizeGB: 1
+    # Build filter - only deploy when these files change
+    buildFilter:
+      paths:
+        - backend/**
+        - frontend/**
+        - Dockerfile
+        - .render.yaml

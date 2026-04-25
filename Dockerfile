@@ -14,31 +14,89 @@ WORKDIR /app
 RUN apk add --no-cache \
     sqlite \
     sqlite-dev \
+    curl \
     && docker-php-ext-install pdo_sqlite
 
-# Copy backend
+# Install composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy backend composer files first (for caching)
+COPY backend/composer.json backend/composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# Copy remaining backend files
 COPY backend/ ./
 
 # Copy built frontend assets
 COPY --from=frontend-build /app/backend/public/dist ./public/dist
 
-# Права для storage и cache (критично для Laravel)
-RUN chmod -R 777 storage bootstrap/cache
+# Создаем директорию для базы данных и устанавливаем права
+# (критично для SQLite в Docker)
+RUN mkdir -p /app/backend/database && \
+    touch /app/backend/database/database.sqlite && \
+    chmod 777 /app/backend/database/database.sqlite && \
+    chmod -R 777 storage bootstrap/cache /app/backend/database
 
-# Install composer dependencies
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Настройка окружения
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+ENV APP_KEY=base64:RENDERPRODUCTIONKEYFOROPENAIAGENTS0000
+ENV APP_URL=${RENDER_EXTERNAL_URL:-http://localhost:8000}
 
-# Создаем SQLite базу данных и запускаем миграции/сидеры при сборке
-# Для production используем файл базы данных
-ENV DB_DATABASE=/app/storage/database.sqlite
+# SQLite настройки для файловой базы данных
 ENV DB_CONNECTION=sqlite
-RUN touch /app/storage/database.sqlite && \
-    chmod 666 /app/storage/database.sqlite && \
-    php artisan migrate --force && \
-    php artisan db:seed --force
+ENV DB_DATABASE=/app/backend/database/database.sqlite
+
+# Дополнительные настройки для production
+ENV LOG_CHANNEL=stderr
+ENV LOG_LEVEL=info
+ENV SESSION_DRIVER=file
+ENV CACHE_DRIVER=file
+
+# Healthcheck для Render.com
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-8000}/api/health || exit 1
 
 EXPOSE 8000
 
-# CMD с корректной подстановкой $PORT для совместимости с Heroku
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+# Entrypoint script для инициализации базы при старте
+RUN cat > /app/entrypoint.sh << 'EOF'
+#!/bin/sh
+set -e
+
+# Создаем директорию для базы данных если она не существует
+DB_DIR=$(dirname "$DB_DATABASE")
+if [ ! -d "$DB_DIR" ]; then
+  echo "Creating database directory: $DB_DIR"
+  mkdir -p "$DB_DIR"
+fi
+
+# Создаем/инициализируем SQLite базу данных
+if [ ! -f "$DB_DATABASE" ]; then
+  echo "Creating SQLite database at $DB_DATABASE..."
+  touch "$DB_DATABASE"
+  chmod 666 "$DB_DATABASE"
+  echo "✓ Database created"
+else
+  echo "✓ Database already exists"
+fi
+
+# Устанавливаем права на storage и директорию базы (критично для SQLite)
+chmod -R 777 storage bootstrap/cache "$DB_DIR"
+chmod 666 "$DB_DATABASE"
+
+# Запускаем миграции и сидеры
+echo "Running migrations..."
+php artisan migrate --force
+
+echo "Running seeders..."
+php artisan db:seed --force
+
+# Запускаем PHP сервер
+echo "Starting server on port ${PORT:-8000}..."
+exec php artisan serve --host=0.0.0.0 --port="${PORT:-8000}"
+EOF
+
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
