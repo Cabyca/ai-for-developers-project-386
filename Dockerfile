@@ -37,8 +37,11 @@ WORKDIR /var/www
 # Copy backend files
 COPY backend/ .
 
-# Install dependencies
+# Install dependencies (vendor after COPY)
 RUN composer install --no-dev --optimize-autoloader
+
+# Fix artisan path to vendor (after composer install)
+RUN sed -i 's|__DIR__.\x27\/..\/vendor\/autoload.php\x27|__DIR__.\x27\/vendor\/autoload.php\x27|g' artisan
 
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./public/dist
