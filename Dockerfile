@@ -24,7 +24,7 @@ RUN ls -la ../backend/public/dist || ls -la dist
 # ===========================================
 FROM php:8.3-cli-alpine
 
-WORKDIR /app
+WORKDIR /app/backend
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -43,16 +43,13 @@ RUN docker-php-ext-install pdo_sqlite
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy backend application
-COPY backend/ ./backend/
+COPY backend/ ./
 
 # Install backend dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copy built frontend
-COPY --from=frontend /app/backend/public/dist ./backend/public/dist
-
-# Set working directory
-WORKDIR /app/backend
+COPY --from=frontend /app/backend/public/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
