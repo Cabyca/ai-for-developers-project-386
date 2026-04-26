@@ -1,5 +1,3 @@
 # Deployment
 
-Add your deployed application URL here after deployment.
-
-**Render.com URL**:
+Публичная ссылка на приложение: [Здесь будет ваша ссылка после деплоя]
