@@ -37,6 +37,10 @@ WORKDIR /var/www
 # Copy backend to root
 COPY backend/ .
 
+# Fix artisan paths
+RUN sed -i "s|require __DIR__.'/../vendor/autoload.php'|require __DIR__.'/vendor/autoload.php'|g" artisan
+RUN sed -i "s|require_once __DIR__.'/../bootstrap/app.php'|require_once __DIR__.'/bootstrap/app.php'|g" artisan
+
 # Install dependencies (RAM-optimized)
 RUN composer install --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction && composer dump-autoload
 
