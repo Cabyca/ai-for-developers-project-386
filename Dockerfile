@@ -48,11 +48,14 @@ COPY backend/ ./backend/
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./backend/public/dist
 
-# Set permissions
-RUN chmod -R 777 backend/storage backend/bootstrap/cache backend/database
-
 # Set working directory
 WORKDIR /app/backend
+
+# Create required directories
+RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
+
+# Set permissions
+RUN chmod -R 777 storage bootstrap/cache database
 
 # Expose port
 EXPOSE 8000
