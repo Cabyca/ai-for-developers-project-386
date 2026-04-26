@@ -41,7 +41,7 @@ COPY backend/ .
 RUN composer install --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction && composer dump-autoload
 
 # Copy built frontend
-COPY --from=frontend /app/backend/public/dist ./public/dist
+COPY --from=frontend /app/dist ./public/dist
 
 # Fix Status 255
 RUN ln -s /var/www/vendor /var/vendor
