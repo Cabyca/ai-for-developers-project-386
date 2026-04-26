@@ -3,11 +3,14 @@
 # ===========================================
 FROM node:18-alpine AS frontend
 
-WORKDIR /app/frontend
+WORKDIR /app
 
-COPY frontend/ ./
+COPY frontend/*.json ./
+COPY frontend/package-lock.json ./
 
 RUN npm install && npm install pinia
+
+COPY frontend/ ./
 
 RUN npm run build
 
@@ -28,7 +31,7 @@ RUN apk add --no-cache \
     oniguruma-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring gd zip
+RUN docker-php-ext-install pdo_mysql gd zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -43,7 +46,7 @@ COPY backend/ .
 RUN composer install --no-dev --optimize-autoloader
 
 # Copy built frontend
-COPY --from=frontend /app/frontend/dist ./public/dist
+COPY --from=frontend /app/backend/public/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
