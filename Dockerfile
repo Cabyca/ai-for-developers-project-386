@@ -11,6 +11,8 @@ RUN npm cache clean --force
 
 RUN npm install --legacy-peer-deps
 
+RUN npm install pinia --legacy-peer-deps
+
 COPY frontend/ ./
 
 RUN npm run build
