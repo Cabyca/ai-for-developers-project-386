@@ -17,13 +17,15 @@ COPY frontend/ ./
 
 RUN npm run build
 
-RUN ls -la ../backend/public/dist || ls -la dist
+RUN ls -la ../backend/public/dist 2>/dev/null || ls -la dist
 
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.3)
 # ===========================================
 FROM php:8.3-cli-alpine
 
+# Create directory structure and set WORKDIR
+RUN mkdir -p /app/backend
 WORKDIR /app/backend
 
 # Install system dependencies
@@ -42,11 +44,20 @@ RUN docker-php-ext-install pdo_sqlite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Debug: show structure before COPY
+RUN ls -la /app/
+
 # Copy backend application
-COPY backend/ ./
+COPY backend/ .
+
+# Debug: show structure after COPY
+RUN ls -la
 
 # Install backend dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Debug: verify vendor
+RUN ls -la vendor/
 
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./public/dist
