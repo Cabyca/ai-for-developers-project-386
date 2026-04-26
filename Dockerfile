@@ -44,7 +44,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY backend/ ./backend/
 
 # Copy built frontend
-COPY --from=frontend /app/frontend/dist ./backend/public/dist
+COPY --from=frontend /app/backend/public/dist ./backend/public/dist
 
 # Set permissions
 RUN chmod -R 777 backend/storage backend/bootstrap/cache backend/database
