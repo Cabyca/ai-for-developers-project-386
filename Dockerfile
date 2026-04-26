@@ -34,26 +34,29 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy entire project
-COPY . .
+# Copy composer files to root
+COPY backend/composer.json ./
+COPY backend/composer.lock ./
 
-# Go into backend folder
-WORKDIR /var/www/backend
+# Install vendor to root (/var/www/vendor)
+RUN composer install --working-dir=/var/www --no-dev --optimize-autoloader
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy backend application
+COPY backend/ ./backend/
 
 # Copy built frontend
-COPY --from=frontend /app/backend/public/dist ./public/dist
+COPY --from=frontend /app/frontend/dist ./backend/public/dist
 
 # Create required directories
-RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
+RUN mkdir -p backend/storage backend/bootstrap/cache backend/storage/framework/sessions backend/storage/framework/views backend/storage/framework/cache
 
 # Set ownership and permissions
-RUN chown -R www-data:www-data /var/www/backend && chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www && chmod -R 775 backend/storage backend/bootstrap/cache
 
 # Expose port
 EXPOSE 10000
 
-# Start application
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+# Start application from backend folder
+WORKDIR /var/www/backend
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=${PORT:-10000}"]
