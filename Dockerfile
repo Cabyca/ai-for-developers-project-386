@@ -5,8 +5,7 @@ FROM node:18-alpine AS frontend
 
 WORKDIR /app
 
-COPY frontend/*.json ./
-COPY frontend/package-lock.json ./
+COPY frontend/package*.json ./
 
 RUN npm install && npm install pinia
 
@@ -46,7 +45,7 @@ COPY backend/ .
 RUN composer install --no-dev --optimize-autoloader
 
 # Copy built frontend
-COPY --from=frontend /app/backend/public/dist ./public/dist
+COPY --from=frontend /app/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
