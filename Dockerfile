@@ -45,6 +45,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy backend application
 COPY backend/ ./backend/
 
+# Install backend dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./backend/public/dist
 
