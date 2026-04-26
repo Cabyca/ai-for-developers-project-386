@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY frontend/ ./
 
-RUN npm install && npm install pinia && npm run build
+RUN npm install && npm install pinia && npm run build -- --outDir dist
 
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.2)
@@ -40,11 +40,11 @@ COPY backend/ .
 # Install dependencies (RAM-optimized)
 RUN composer install --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction && composer dump-autoload
 
-# Copy built frontend
-COPY --from=frontend /app/dist ./public/dist
-
 # Fix Status 255
 RUN ln -s /var/www/vendor /var/vendor
+
+# Copy built frontend
+COPY --from=frontend /app/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
