@@ -3,11 +3,15 @@
 # ===========================================
 FROM node:18-alpine AS frontend
 
-WORKDIR /app/frontend
+WORKDIR /app
+
+COPY frontend/package*.json ./
+
+RUN npm install && npm install pinia
 
 COPY frontend/ ./
 
-RUN npm install && npm install pinia && npm run build
+RUN npm run build
 
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.2)
@@ -34,29 +38,26 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy composer files to root
-COPY backend/composer.json ./
-COPY backend/composer.lock ./
+# Copy entire backend folder to root
+COPY backend/ .
 
-# Install vendor to root (/var/www/vendor)
-RUN composer install --working-dir=/var/www --no-dev --optimize-autoloader
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Copy backend application
-COPY backend/ ./backend/
+# Fix artisan path to vendor
+RUN sed -i "s|/../vendor/autoload.php|/vendor/autoload.php|g" artisan
 
 # Copy built frontend
-COPY --from=frontend /app/frontend/dist ./backend/public/dist
+COPY --from=frontend /app/dist ./public/dist
 
 # Create required directories
-RUN mkdir -p backend/storage backend/bootstrap/cache backend/storage/framework/sessions backend/storage/framework/views backend/storage/framework/cache
+RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
 
 # Set ownership and permissions
-RUN chown -R www-data:www-data /var/www && chmod -R 775 backend/storage backend/bootstrap/cache
+RUN chown -R www-data:www-data /var/www && chmod -R 775 storage bootstrap/cache
 
 # Expose port
 EXPOSE 10000
 
-# Start application from backend folder
-WORKDIR /var/www/backend
-
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=${PORT:-10000}"]
+# Start application
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
