@@ -3,15 +3,11 @@
 # ===========================================
 FROM node:18-alpine AS frontend
 
-WORKDIR /app
-
-COPY frontend/package*.json ./
-
-RUN npm install && npm install pinia
+WORKDIR /app/frontend
 
 COPY frontend/ ./
 
-RUN npm run build
+RUN npm install && npm install pinia && npm run build
 
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.2)
@@ -45,7 +41,7 @@ COPY backend/ .
 RUN composer install --no-dev --optimize-autoloader
 
 # Copy built frontend
-COPY --from=frontend /app/dist ./public/dist
+COPY --from=frontend /app/backend/public/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
