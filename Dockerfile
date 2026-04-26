@@ -17,6 +17,8 @@ COPY frontend/ ./
 
 RUN npm run build
 
+RUN ls -la ../backend/public/dist || ls -la dist
+
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.3)
 # ===========================================
