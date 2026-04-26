@@ -7,20 +7,24 @@ const features = [
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-    <h3 class="text-xl font-semibold text-gray-900 mb-6">
+  <div class="bg-white rounded-[24px] border border-slate-200/50 shadow-sm p-8 md:p-10">
+    <h3 class="text-2xl font-bold text-slate-900 tracking-tight mb-8">
       Возможности
     </h3>
     
-    <ul class="space-y-4">
-      <li
+    <div class="grid md:grid-cols-3 gap-8">
+      <div
         v-for="(feature, index) in features"
         :key="index"
-        class="flex items-start"
+        class="flex flex-col"
       >
-        <span class="text-orange-500 mr-2 mt-1">•</span>
-        <span class="text-gray-600 leading-relaxed">{{ feature }}</span>
-      </li>
-    </ul>
+        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <p class="text-slate-500 text-sm leading-relaxed">{{ feature }}</p>
+      </div>
+    </div>
   </div>
 </template>

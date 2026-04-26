@@ -18,8 +18,8 @@ defineEmits(['previous', 'next'])
 </script>
 
 <template>
-  <div class="flex items-center justify-between mb-6">
-    <h3 class="text-lg font-semibold text-gray-900 capitalize">
+  <div class="flex items-center justify-between mb-8">
+    <h3 class="text-xl font-bold text-slate-900 capitalize tracking-tight">
       {{ currentMonth }}
     </h3>
     
@@ -27,10 +27,10 @@ defineEmits(['previous', 'next'])
       <button
         @click="$emit('previous')"
         :disabled="!canGoPrevious"
-        class="p-2 rounded-lg transition-colors"
+        class="p-2.5 rounded-[12px] transition-all duration-200 ease-in-out"
         :class="canGoPrevious
-          ? 'hover:bg-gray-100 text-gray-600'
-          : 'text-gray-300 cursor-not-allowed'"
+          ? 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+          : 'text-slate-300 cursor-not-allowed'"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -40,10 +40,10 @@ defineEmits(['previous', 'next'])
       <button
         @click="$emit('next')"
         :disabled="!canGoNext"
-        class="p-2 rounded-lg transition-colors"
+        class="p-2.5 rounded-[12px] transition-all duration-200 ease-in-out"
         :class="canGoNext
-          ? 'hover:bg-gray-100 text-gray-600'
-          : 'text-gray-300 cursor-not-allowed'"
+          ? 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+          : 'text-slate-300 cursor-not-allowed'"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

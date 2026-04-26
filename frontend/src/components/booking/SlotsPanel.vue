@@ -45,7 +45,7 @@ const handleContinue = () => {
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col h-full">
+  <div class="flex flex-col h-full">
     <SlotList
       :slots="slots"
       :selected-slot="selectedSlot"
@@ -58,7 +58,7 @@ const handleContinue = () => {
     <div class="mt-auto pt-6 flex space-x-3">
       <button
         @click="$emit('back')"
-        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+        class="flex-1 px-4 py-3.5 border border-slate-200 rounded-[16px] text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 ease-in-out"
       >
         Назад
       </button>
@@ -66,7 +66,7 @@ const handleContinue = () => {
       <button
         @click="handleContinue"
         :disabled="!hasSelection"
-        class="flex-1 px-4 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed transition-colors"
+        class="flex-1 px-4 py-3.5 bg-orange-500 text-white rounded-[16px] font-semibold hover:bg-orange-600 disabled:bg-orange-200 disabled:cursor-not-allowed transition-all duration-200 ease-in-out hover:shadow-lg hover:shadow-orange-500/25"
       >
         Продолжить
       </button>

@@ -34,7 +34,7 @@ const handleDateSelect = (date) => {
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border border-gray-200 p-6">
+  <div>
     <CalendarHeader
       :current-month="monthHeader"
       :can-go-previous="canGoToPreviousMonth"

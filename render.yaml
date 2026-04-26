@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: calendar-app
+    runtime: docker
+    repo: https://github.com/your-username/calendar-app.git
+    branch: main
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+    disk:
+      name: database
+      mountPath: /app/backend/database
+      sizeGB: 1

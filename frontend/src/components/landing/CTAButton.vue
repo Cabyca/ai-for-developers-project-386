@@ -12,7 +12,7 @@ defineProps({
 <template>
   <RouterLink
     :to="to"
-    class="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+    class="inline-flex items-center bg-orange-500 text-white rounded-full px-8 py-4 font-semibold text-lg transition-all duration-200 ease-in-out hover:bg-orange-600 hover:scale-105 hover:shadow-lg active:scale-95 shadow-md shadow-orange-500/20"
   >
     <span><slot /></span>
     <svg

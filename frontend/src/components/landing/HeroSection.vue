@@ -5,36 +5,38 @@ import CTAButton from './CTAButton.vue'
 <template>
   <section class="relative overflow-hidden">
     <!-- Gradient background -->
-    <div class="absolute inset-0 bg-gradient-to-r from-blue-100 via-blue-50 to-orange-50"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-blue-50"></div>
     
     <!-- Content -->
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <!-- Left column: Text content -->
-        <div>
-          <span class="inline-block px-4 py-1.5 bg-white rounded-full text-sm font-medium text-gray-600 mb-6">
-            БЫСТРАЯ ЗАПИСЬ НА ЗВОНОК
-          </span>
-          
-          <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Calendar
-          </h1>
-          
-          <p class="text-xl text-gray-600 mb-8 leading-relaxed">
-            Забронируйте встречу за минуту: выберите тип события и удобное время.
-          </p>
-          
-          <CTAButton to="/book">
-            Записаться
-          </CTAButton>
-        </div>
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+      <div class="text-center">
+        <!-- Badge -->
+        <span class="inline-flex items-center px-4 py-2 bg-white rounded-full text-sm font-medium text-slate-600 mb-8 shadow-sm border border-slate-100">
+          <span class="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+          БЫСТРАЯ ЗАПИСЬ НА ЗВОНОК
+        </span>
         
-        <!-- Right column: Features card -->
-        <div class="lg:pl-8">
-          <slot name="features">
-            <!-- FeaturesCard will be inserted here -->
-          </slot>
-        </div>
+        <!-- Main heading -->
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6 leading-[1.1]">
+          Календарь звонков
+        </h1>
+        
+        <!-- Subtitle -->
+        <p class="text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">
+          Забронируйте встречу за минуту: выберите тип события и удобное время.
+        </p>
+        
+        <!-- CTA Button -->
+        <CTAButton to="/book">
+          Записаться
+        </CTAButton>
+      </div>
+      
+      <!-- Features card slot -->
+      <div class="mt-16">
+        <slot name="features">
+          <!-- FeaturesCard will be inserted here -->
+        </slot>
       </div>
     </div>
   </section>

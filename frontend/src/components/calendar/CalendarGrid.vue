@@ -37,11 +37,11 @@ const handleDaySelect = (date) => {
 <template>
   <div>
     <!-- Weekday headers -->
-    <div class="grid grid-cols-7 gap-1 mb-2">
+    <div class="grid grid-cols-7 gap-1 mb-3">
       <div
         v-for="day in weekdays"
         :key="day"
-        class="text-center text-xs font-medium text-gray-500 py-2"
+        class="text-center text-xs font-semibold text-slate-500 py-2 uppercase tracking-wider"
       >
         {{ day }}
       </div>
