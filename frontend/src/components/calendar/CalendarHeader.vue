@@ -27,7 +27,7 @@ defineEmits(['previous', 'next'])
       <button
         @click="$emit('previous')"
         :disabled="!canGoPrevious"
-        class="p-2.5 rounded-[12px] transition-all duration-200 ease-in-out"
+        class="p-2.5 rounded-[12px] transition-all duration-300 ease-in-out"
         :class="canGoPrevious
           ? 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
           : 'text-slate-300 cursor-not-allowed'"
@@ -40,7 +40,7 @@ defineEmits(['previous', 'next'])
       <button
         @click="$emit('next')"
         :disabled="!canGoNext"
-        class="p-2.5 rounded-[12px] transition-all duration-200 ease-in-out"
+        class="p-2.5 rounded-[12px] transition-all duration-300 ease-in-out"
         :class="canGoNext
           ? 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
           : 'text-slate-300 cursor-not-allowed'"

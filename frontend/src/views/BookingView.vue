@@ -70,7 +70,7 @@ const goToConfirmation = () => {
       <div class="mb-10">
         <button 
           @click="goBack" 
-          class="inline-flex items-center text-slate-500 hover:text-indigo-500 mb-4 transition-colors duration-200"
+          class="inline-flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-500 rounded-[12px] hover:text-indigo-600 hover:border-indigo-200 mb-4 transition-all duration-300"
         >
           <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>

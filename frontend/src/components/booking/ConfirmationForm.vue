@@ -66,7 +66,7 @@ const getInputClasses = (hasError) => {
   if (hasError) {
     return `${baseClasses} border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50`
   }
-  return `${baseClasses} border-gray-300 focus:ring-orange-500 focus:border-orange-500`
+  return `${baseClasses} border-gray-300 focus:ring-indigo-500 focus:border-indigo-500`
 }
 
 const handleBlur = (field) => {
@@ -132,7 +132,7 @@ const handleSubmit = () => {
         v-model="form.comment"
         rows="3"
         maxlength="500"
-        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
         placeholder="Дополнительная информация..."
       ></textarea>
     </div>

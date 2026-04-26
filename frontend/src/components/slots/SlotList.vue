@@ -55,7 +55,7 @@ const handleSlotSelect = (slot) => {
       <p class="text-red-500 mb-2 text-sm font-medium">{{ error }}</p>
       <button
         @click="$emit('refresh')"
-        class="text-orange-500 hover:text-orange-600 text-sm font-semibold transition-colors"
+        class="text-indigo-600 hover:text-indigo-700 text-sm font-semibold transition-colors"
       >
         Попробовать снова
       </button>
@@ -91,16 +91,16 @@ const handleSlotSelect = (slot) => {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: rgba(241, 245, 249, 0.5);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(203, 213, 225, 0.6);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(148, 163, 184, 0.7);
 }
 </style>

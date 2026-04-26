@@ -165,7 +165,7 @@ onMounted(() => {
                     type="text"
                     required
                     maxlength="100"
-                    class="w-full px-4 py-3 border border-slate-200 rounded-[16px] focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-200 ease-in-out bg-white/60 backdrop-blur-sm"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-[16px] focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-300 ease-in-out bg-white/60 backdrop-blur-sm"
                     placeholder="Например: Консультация 30 минут"
                   />
                 </div>
@@ -181,7 +181,7 @@ onMounted(() => {
                     required
                     maxlength="500"
                     rows="3"
-                    class="w-full px-4 py-3 border border-slate-200 rounded-[16px] focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-200 ease-in-out bg-white/60 backdrop-blur-sm resize-none"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-[16px] focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all duration-300 ease-in-out bg-white/60 backdrop-blur-sm resize-none"
                     placeholder="Описание типа встречи..."
                   ></textarea>
                 </div>
@@ -198,7 +198,7 @@ onMounted(() => {
                       :class="form.durationMinutes === 15 
                         ? 'bg-gradient-to-r from-indigo-400 to-purple-400 text-white border-transparent shadow-lg shadow-indigo-400/30' 
                         : 'bg-white/60 text-slate-700 border-slate-200 hover:border-indigo-300'"
-                      class="px-4 py-3 border rounded-[16px] font-medium transition-all duration-200 ease-in-out"
+                      class="px-4 py-3 border rounded-[16px] font-medium transition-all duration-300 ease-in-out"
                     >
                       15 минут
                     </button>
@@ -208,7 +208,7 @@ onMounted(() => {
                       :class="form.durationMinutes === 30 
                         ? 'bg-gradient-to-r from-indigo-400 to-purple-400 text-white border-transparent shadow-lg shadow-indigo-400/30' 
                         : 'bg-white/60 text-slate-700 border-slate-200 hover:border-indigo-300'"
-                      class="px-4 py-3 border rounded-[16px] font-medium transition-all duration-200 ease-in-out"
+                      class="px-4 py-3 border rounded-[16px] font-medium transition-all duration-300 ease-in-out"
                     >
                       30 минут
                     </button>
@@ -237,8 +237,9 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Event Types Grid -->
-          <div class="mt-8">
+          <!-- Right column: Combined -->
+          <div class="flex-1 w-full space-y-8">
+            <!-- Event Types Grid -->
             <div class="bg-white/70 backdrop-blur-xl rounded-[32px] border border-white/60 shadow-xl shadow-slate-200/30 p-6 md:p-8">
               <div class="flex items-center mb-6">
                 <div class="w-10 h-10 rounded-[16px] bg-indigo-100 flex items-center justify-center mr-4">
@@ -252,8 +253,8 @@ onMounted(() => {
                 </div>
               </div>
               
-              <div v-if="isLoadingEventTypes" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div v-for="n in 3" :key="n" class="h-32 bg-slate-100 animate-pulse rounded-[16px]"></div>
+              <div v-if="isLoadingEventTypes" class="grid grid-cols-2 gap-6">
+                <div v-for="n in 4" :key="n" class="min-h-[140px] bg-slate-100 animate-pulse rounded-[20px]"></div>
               </div>
               
               <div v-else-if="eventTypes.length === 0" class="text-center py-12 bg-slate-50/60 rounded-[16px]">
@@ -266,33 +267,33 @@ onMounted(() => {
                 <div class="text-slate-400 text-sm mt-1">Создайте первый тип события выше</div>
               </div>
               
-              <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 w-full">
+              <div v-else class="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                 <button
                   v-for="eventType in eventTypes"
                   :key="eventType.id"
                   @click="navigateToBooking(eventType)"
-                  class="flex flex-col w-full bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-slate-200/50 shadow-sm hover:border-indigo-300 hover:shadow-xl hover:shadow-indigo-200/30 transition-all duration-300 ease-out hover:-translate-y-1 cursor-pointer text-left group"
+                  class="flex flex-col min-h-[140px] bg-white/70 backdrop-blur-md rounded-[20px] p-6 border border-slate-200/50 shadow-sm hover:border-indigo-200/60 hover:bg-slate-50/50 hover:shadow-xl hover:shadow-indigo-200/30 transition-all duration-300 ease-out hover:-translate-y-1 cursor-pointer text-left group"
                 >
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="w-10 h-10 rounded-[12px] bg-indigo-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors shrink-0">
-                      <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                      <div class="w-8 h-8 rounded-[10px] bg-indigo-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors shrink-0">
+                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
+                      <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full shrink-0">
+                        {{ formatDuration(eventType.durationMinutes) }}
+                      </span>
                     </div>
-                    <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full shrink-0">
-                      {{ formatDuration(eventType.durationMinutes) }}
-                    </span>
                   </div>
-                  <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors truncate">{{ eventType.title }}</h3>
+                  <h3 class="text-lg font-bold text-slate-900 leading-tight mb-2 group-hover:text-indigo-600 transition-colors">{{ eventType.title }}</h3>
                   <p class="text-sm text-slate-500 line-clamp-2">{{ eventType.description }}</p>
                 </button>
               </div>
             </div>
-          </div>
 
-          <!-- Right column: Bookings list -->
-          <div class="flex-1 w-full">
-            <div class="bg-white/70 backdrop-blur-xl rounded-[32px] border border-white/60 shadow-xl shadow-slate-200/30 p-6 md:p-8 h-full">
+            <!-- Bookings list -->
+            <div class="bg-white/70 backdrop-blur-xl rounded-[32px] border border-white/60 shadow-xl shadow-slate-200/30 p-6 md:p-8">
               <div class="flex justify-between items-center mb-6">
                 <div>
                   <h2 class="text-xl font-bold text-slate-800 tracking-tight">Все бронирования</h2>
@@ -301,7 +302,7 @@ onMounted(() => {
                 <button
                   @click="loadBookings"
                   :disabled="isLoadingBookings"
-                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100 rounded-[12px] transition-all duration-200 ease-in-out disabled:opacity-50 backdrop-blur-sm"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100 rounded-[12px] transition-all duration-300 ease-in-out disabled:opacity-50 backdrop-blur-sm"
                 >
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -310,8 +311,8 @@ onMounted(() => {
                 </button>
               </div>
 
-              <div v-if="isLoadingBookings" class="space-y-4">
-                <div v-for="n in 3" :key="n" class="h-24 bg-slate-100/60 animate-pulse rounded-[16px]"></div>
+              <div v-if="isLoadingBookings" class="space-y-3">
+                <div v-for="n in 3" :key="n" class="h-20 bg-slate-100/60 animate-pulse rounded-[16px]"></div>
               </div>
 
               <div v-else-if="bookingsError" class="text-center py-12 bg-red-50/60 rounded-[16px] backdrop-blur-sm">
@@ -337,55 +338,57 @@ onMounted(() => {
                 <div class="text-slate-400 text-sm">Создайте первый тип события и запишитесь!</div>
               </div>
 
-              <div v-else class="divide-y divide-slate-100/60">
+              <!-- Booking rows - horizontal layout -->
+              <div v-else class="space-y-3">
                 <div
                   v-for="booking in bookings"
                   :key="booking.id"
-                  class="py-6 first:pt-0"
+                  class="flex items-center justify-between p-4 bg-white/50 hover:bg-slate-50/50 rounded-[16px] border border-slate-100/50 hover:border-indigo-100/50 transition-all duration-300 cursor-pointer group"
                 >
-                  <div class="flex justify-between items-start mb-4">
-                    <div class="flex items-center space-x-3">
-                      <span
-                        v-if="isUpcoming(booking.startsAt)"
-                        class="inline-flex items-center px-2.5 py-1 bg-gradient-to-r from-indigo-400 to-purple-400 text-white text-xs font-semibold rounded-full shadow-lg shadow-indigo-400/30"
-                      >
-                        <span class="w-1.5 h-1.5 bg-white rounded-full mr-1.5 animate-pulse"></span>
-                        Предстоящее
-                      </span>
-                      <span
-                        v-else
-                        class="px-2.5 py-1 bg-slate-100/80 text-slate-500 text-xs font-medium rounded-full backdrop-blur-sm"
-                      >
-                        Прошедшее
-                      </span>
-                    </div>
-                    <div class="flex items-center text-slate-800 font-semibold">
-                      <svg class="w-4 h-4 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <!-- Time + Status -->
+                  <div class="flex items-center space-x-4">
+                    <div class="flex items-center text-lg font-bold text-slate-800">
+                      <svg class="w-5 h-5 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                       </svg>
                       {{ formatDateTime(booking.startsAt) }}
                     </div>
+                    <span
+                      v-if="isUpcoming(booking.startsAt)"
+                      class="inline-flex items-center px-3 py-1.5 bg-white/60 backdrop-blur-md text-indigo-700 text-xs font-semibold rounded-full border border-indigo-100 shadow-sm"
+                    >
+                      <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full mr-2 animate-pulse"></span>
+                      Предстоящее
+                    </span>
+                    <span
+                      v-else
+                      class="px-3 py-1.5 bg-white/60 backdrop-blur-md text-slate-500 text-xs font-medium rounded-full border border-slate-100"
+                    >
+                      Прошедшее
+                    </span>
                   </div>
 
-                  <div class="space-y-2">
-                    <div class="flex items-center text-sm">
-                      <span class="text-slate-400 w-20">Тип:</span>
-                      <span class="font-medium text-slate-800">
-                        {{ getEventTitle(booking.eventTypeId) }}
-                      </span>
+                  <!-- Guest Info -->
+                  <div class="flex items-center space-x-6 flex-1 px-6">
+                    <div class="flex items-center min-w-0">
+                      <span class="text-slate-400 text-sm mr-2">Тип:</span>
+                      <span class="font-medium text-slate-800 truncate">{{ getEventTitle(booking.eventTypeId) }}</span>
                     </div>
-                    <div class="flex items-center text-sm">
-                      <span class="text-slate-400 w-20">Гость:</span>
-                      <span class="font-medium text-slate-800">{{ booking.guestName }}</span>
+                    <div class="flex items-center min-w-0">
+                      <span class="text-slate-400 text-sm mr-2">Гость:</span>
+                      <span class="font-medium text-slate-800 truncate">{{ booking.guestName }}</span>
                     </div>
-                    <div class="flex items-center text-sm">
-                      <span class="text-slate-400 w-20">Email:</span>
-                      <span class="text-slate-600">{{ booking.guestEmail }}</span>
+                    <div class="flex items-center min-w-0">
+                      <span class="text-slate-400 text-sm mr-2">Email:</span>
+                      <span class="text-slate-600 truncate">{{ booking.guestEmail }}</span>
                     </div>
-                    <div v-if="booking.comment" class="mt-4 pt-4 border-t border-slate-100/60">
-                      <span class="text-slate-400 text-sm">Комментарий:</span>
-                      <p class="text-slate-600 text-sm mt-1">{{ booking.comment }}</p>
-                    </div>
+                  </div>
+
+                  <!-- Expand indicator -->
+                  <div class="text-slate-300 group-hover:text-indigo-400 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
                   </div>
                 </div>
               </div>

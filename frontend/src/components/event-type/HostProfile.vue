@@ -18,7 +18,7 @@ defineProps({
 <template>
   <div class="flex items-center space-x-3">
     <!-- Avatar -->
-    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 flex items-center justify-center text-white font-semibold text-lg">
+    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-semibold text-lg">
       <template v-if="avatarUrl">
         <img
           :src="avatarUrl"

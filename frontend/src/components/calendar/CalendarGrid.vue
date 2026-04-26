@@ -37,7 +37,7 @@ const handleDaySelect = (date) => {
 <template>
   <div>
     <!-- Weekday headers -->
-    <div class="grid grid-cols-7 gap-1 mb-3">
+    <div class="grid grid-cols-7 gap-2 mb-4">
       <div
         v-for="day in weekdays"
         :key="day"
@@ -48,16 +48,16 @@ const handleDaySelect = (date) => {
     </div>
     
     <!-- Loading state -->
-    <div v-if="isLoading" class="grid grid-cols-7 gap-1">
+    <div v-if="isLoading" class="grid grid-cols-7 gap-2">
       <SkeletonDay v-for="n in 28" :key="n" />
     </div>
     
     <!-- Calendar grid -->
-    <div v-else class="space-y-1">
+    <div v-else class="space-y-2">
       <div
         v-for="(week, weekIndex) in weeks"
         :key="weekIndex"
-        class="grid grid-cols-7 gap-1"
+        class="grid grid-cols-7 gap-2"
       >
         <CalendarDay
           v-for="(day, dayIndex) in week"

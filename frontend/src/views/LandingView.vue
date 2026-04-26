@@ -58,9 +58,9 @@ onMounted(loadEventTypes)
         style="background: radial-gradient(circle, #f0fdf4 0%, #dcfce7 50%, transparent 70%); bottom: -20%; left: 10%;"
       ></div>
       
-      <!-- Gradient orb 4 - Warm Peach -->
+      <!-- Gradient orb 4 - Warm Peach with pulse -->
       <div 
-        class="absolute w-[600px] h-[600px] rounded-full blur-[110px] opacity-30 animate-pulse-slow"
+        class="absolute w-[600px] h-[600px] rounded-full blur-[110px] opacity-30 animate-pulse"
         style="background: radial-gradient(circle, #fff7ed 0%, #ffedd5 50%, transparent 70%); bottom: 10%; right: 15%;"
       ></div>
       
@@ -80,8 +80,8 @@ onMounted(loadEventTypes)
           </div>
           
           <!-- Main heading -->
-          <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-slate-800 tracking-tight mb-6 leading-[1.05]">
-            Календарь<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">звонков</span>
+          <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-slate-800 tracking-tight mb-6 leading-tight">
+            Календарь<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-purple-600">звонков</span>
           </h1>
           
           <!-- Subtitle -->
@@ -92,12 +92,13 @@ onMounted(loadEventTypes)
           <!-- CTA Button -->
           <button
             @click="$router.push('/book')"
-            class="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-semibold text-lg rounded-full shadow-xl shadow-indigo-500/25 hover:shadow-2xl hover:shadow-indigo-500/30 hover:scale-105 active:scale-95 transition-all duration-300 ease-out"
+            class="group relative inline-flex items-center px-10 py-5 bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-semibold text-lg rounded-full shadow-xl shadow-indigo-500/25 hover:shadow-2xl hover:shadow-indigo-500/30 hover:scale-105 active:scale-95 transition-all duration-300 ease-out"
           >
-            <span>Начать бронирование</span>
-            <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="relative z-10">Начать бронирование</span>
+            <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
+            <span class="absolute inset-0 rounded-full animate-ping opacity-30 bg-indigo-400"></span>
           </button>
         </div>
       </section>

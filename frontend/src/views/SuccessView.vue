@@ -29,7 +29,7 @@ const handleGoHome = () => {
       <RouterLink
         to="/"
         @click="handleGoHome"
-        class="inline-flex items-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors"
+        class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
       >
         На главную
       </RouterLink>

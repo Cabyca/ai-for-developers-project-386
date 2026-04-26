@@ -26,7 +26,7 @@ const isActive = (path) => {
         <nav class="flex items-center space-x-2">
           <RouterLink
             to="/"
-            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200"
+            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-300"
             :class="isActive('/')
               ? 'bg-white/80 text-slate-900 shadow-md shadow-slate-200/50'
               : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'"
@@ -35,7 +35,7 @@ const isActive = (path) => {
           </RouterLink>
           <RouterLink
             to="/book"
-            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200"
+            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-300"
             :class="isActive('/book') || route.path.startsWith('/book/')
               ? 'bg-gradient-to-r from-indigo-400 to-purple-400 text-white shadow-lg shadow-indigo-400/30'
               : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'"
@@ -44,7 +44,7 @@ const isActive = (path) => {
           </RouterLink>
           <RouterLink
             to="/admin"
-            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-200"
+            class="px-4 py-2 rounded-[12px] text-sm font-medium transition-all duration-300"
             :class="isActive('/admin')
               ? 'bg-white/80 text-slate-900 shadow-md shadow-slate-200/50'
               : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'"

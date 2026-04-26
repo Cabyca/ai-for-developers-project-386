@@ -18,10 +18,10 @@ defineEmits(['select'])
 <template>
   <button
     @click="$emit('select', eventType)"
-    class="w-full text-left p-6 bg-white rounded-xl border transition-all duration-200"
+    class="w-full text-left p-6 bg-white rounded-xl border transition-all duration-300"
     :class="isSelected
-      ? 'border-orange-500 ring-2 ring-orange-500 shadow-md'
-      : 'border-gray-200 hover:border-orange-300 hover:shadow-md'"
+      ? 'border-indigo-500 ring-2 ring-indigo-500 shadow-md'
+      : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'"
   >
     <div class="flex items-start justify-between">
       <div class="flex-1">

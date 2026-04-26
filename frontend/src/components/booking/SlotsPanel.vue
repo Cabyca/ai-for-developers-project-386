@@ -58,7 +58,7 @@ const handleContinue = () => {
     <div class="mt-auto pt-6 flex space-x-3">
       <button
         @click="$emit('back')"
-        class="flex-1 px-4 py-3.5 border border-slate-200 rounded-[16px] text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 ease-in-out"
+        class="flex-1 px-4 py-3.5 bg-white border border-slate-200 text-slate-700 font-semibold rounded-[16px] hover:bg-slate-50 hover:border-slate-300 hover:text-indigo-600 transition-all duration-300 ease-in-out"
       >
         Назад
       </button>
@@ -66,7 +66,7 @@ const handleContinue = () => {
       <button
         @click="handleContinue"
         :disabled="!hasSelection"
-        class="flex-1 px-4 py-3.5 bg-orange-500 text-white rounded-[16px] font-semibold hover:bg-orange-600 disabled:bg-orange-200 disabled:cursor-not-allowed transition-all duration-200 ease-in-out hover:shadow-lg hover:shadow-orange-500/25"
+        class="flex-1 px-4 py-3.5 bg-indigo-600 text-white rounded-[16px] font-semibold hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-indigo-500/25"
       >
         Продолжить
       </button>

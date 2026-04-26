@@ -25,7 +25,7 @@ const handleClick = () => {
       'invisible': day.isPadding,
       
       // Weekend days (disabled)
-      'text-slate-300 cursor-not-allowed': day.isWeekend && !day.isSelectable,
+      'text-slate-300 opacity-30 cursor-not-allowed': day.isWeekend && !day.isSelectable,
       
       // Regular day - glassmorphism
       'text-slate-600 hover:bg-white/80 hover:shadow-md hover:shadow-slate-200/30 border border-transparent hover:border-white/80': day.isSelectable && !day.isSelected && !day.isToday,

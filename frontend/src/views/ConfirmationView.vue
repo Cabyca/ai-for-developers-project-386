@@ -137,7 +137,7 @@ const getSubmitButtonHint = () => {
           <button
             @click="handleSubmit"
             :disabled="!canSubmit || state.isSubmitting"
-            class="flex-1 px-4 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 disabled:bg-orange-300 disabled:cursor-not-allowed transition-colors"
+            class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-colors"
           >
             {{ state.isSubmitting ? 'Создание...' : 'Подтвердить' }}
           </button>
