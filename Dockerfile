@@ -38,13 +38,13 @@ WORKDIR /var/www
 COPY backend/ .
 
 # Install dependencies (RAM-optimized)
-RUN composer install --no-dev --no-scripts --no-autoloader && composer dump-autoload
-
-# Fix paths (Status 255)
-RUN ln -s /var/www/vendor /var/vendor
+RUN composer install --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction && composer dump-autoload
 
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./public/dist
+
+# Fix Status 255
+RUN ln -s /var/www/vendor /var/vendor
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
