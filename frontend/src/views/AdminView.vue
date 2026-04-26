@@ -339,53 +339,45 @@ onMounted(() => {
               </div>
 
               <!-- Booking rows - horizontal layout -->
-              <div v-else class="space-y-3">
+              <div v-else class="divide-y divide-slate-100/50">
                 <div
                   v-for="booking in bookings"
                   :key="booking.id"
-                  class="flex items-center justify-between p-4 bg-white/50 hover:bg-slate-50/50 rounded-[16px] border border-slate-100/50 hover:border-indigo-100/50 transition-all duration-300 cursor-pointer group"
+                  class="flex items-center gap-4 py-4 first:pt-0 last:pb-0 hover:bg-slate-50/50 transition-colors duration-300 cursor-pointer group"
                 >
-                  <!-- Time + Status -->
-                  <div class="flex items-center space-x-4">
-                    <div class="flex items-center text-lg font-bold text-slate-800">
-                      <svg class="w-5 h-5 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      {{ formatDateTime(booking.startsAt) }}
-                    </div>
-                    <span
-                      v-if="isUpcoming(booking.startsAt)"
-                      class="inline-flex items-center px-3 py-1.5 bg-white/60 backdrop-blur-md text-indigo-700 text-xs font-semibold rounded-full border border-indigo-100 shadow-sm"
-                    >
-                      <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full mr-2 animate-pulse"></span>
-                      Предстоящее
-                    </span>
-                    <span
-                      v-else
-                      class="px-3 py-1.5 bg-white/60 backdrop-blur-md text-slate-500 text-xs font-medium rounded-full border border-slate-100"
-                    >
-                      Прошедшее
-                    </span>
+                  <!-- Time -->
+                  <div class="w-20 flex-shrink-0 flex items-center text-base font-semibold text-slate-800">
+                    <svg class="w-4 h-4 text-slate-400 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {{ formatDateTime(booking.startsAt) }}
                   </div>
 
-                  <!-- Guest Info -->
-                  <div class="flex items-center space-x-6 flex-1 px-6">
-                    <div class="flex items-center min-w-0">
-                      <span class="text-slate-400 text-sm mr-2">Тип:</span>
-                      <span class="font-medium text-slate-800 truncate">{{ getEventTitle(booking.eventTypeId) }}</span>
-                    </div>
-                    <div class="flex items-center min-w-0">
-                      <span class="text-slate-400 text-sm mr-2">Гость:</span>
-                      <span class="font-medium text-slate-800 truncate">{{ booking.guestName }}</span>
-                    </div>
-                    <div class="flex items-center min-w-0">
-                      <span class="text-slate-400 text-sm mr-2">Email:</span>
-                      <span class="text-slate-600 truncate">{{ booking.guestEmail }}</span>
-                    </div>
+                  <!-- Status -->
+                  <span
+                    v-if="isUpcoming(booking.startsAt)"
+                    class="px-2.5 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-full flex-shrink-0"
+                  >
+                    Предстоящее
+                  </span>
+                  <span
+                    v-else
+                    class="px-2.5 py-1 bg-slate-100 text-slate-500 text-xs font-medium rounded-full flex-shrink-0"
+                  >
+                    Прошедшее
+                  </span>
+
+                  <!-- Data Grid -->
+                  <div class="flex-1 flex items-center gap-x-6 gap-y-1 min-w-0">
+                    <span class="text-sm text-slate-900 truncate">{{ getEventTitle(booking.eventTypeId) }}</span>
+                    <span class="text-slate-300">•</span>
+                    <span class="text-sm text-slate-500 truncate">{{ booking.guestName }}</span>
+                    <span class="text-slate-300">•</span>
+                    <span class="text-sm text-slate-400 truncate">{{ booking.guestEmail }}</span>
                   </div>
 
                   <!-- Expand indicator -->
-                  <div class="text-slate-300 group-hover:text-indigo-400 transition-colors">
+                  <div class="text-slate-300 group-hover:text-indigo-500 transition-colors flex-shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
