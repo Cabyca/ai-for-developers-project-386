@@ -25,9 +25,9 @@ WORKDIR /app
 # Install system dependencies
 RUN apk add --no-cache \
     sqlite \
-    libsqlite3-dev \
-    libxml2 \
-    libxslt \
+    sqlite-dev \
+    libxml2-dev \
+    libxslt-dev \
     unzip \
     git \
     curl
