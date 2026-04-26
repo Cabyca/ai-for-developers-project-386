@@ -17,16 +17,10 @@ COPY frontend/ ./
 
 RUN npm run build
 
-RUN ls -la ../backend/public/dist 2>/dev/null || ls -la dist
-
 # ===========================================
 # Stage 2: Production Runtime (PHP 8.3)
 # ===========================================
 FROM php:8.3-cli-alpine
-
-# Create directory structure and set WORKDIR
-RUN mkdir -p /app/backend
-WORKDIR /app/backend
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -44,36 +38,38 @@ RUN docker-php-ext-install pdo_sqlite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Debug: show structure before COPY
-RUN ls -la /app/
+# Set working directory
+WORKDIR /var/www
 
-# Copy backend application
+# Copy dependency files first
+COPY backend/composer.json backend/composer.lock ./
+
+# Install dependencies without scripts
+RUN composer install --no-dev --no-scripts --no-autoloader
+
+# Copy all backend files
 COPY backend/ .
 
-# Debug: show structure after COPY
-RUN ls -la
-
-# Install backend dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Debug: verify vendor
-RUN ls -la vendor/
+# Generate optimized autoloader
+RUN composer dump-autoloader --optimize
 
 # Copy built frontend
-COPY --from=frontend /app/backend/public/dist ./public/dist
+COPY --from=frontend /app/frontend/backend/public/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
 
-# Set permissions
-RUN chmod -R 777 storage bootstrap/cache database
+# Set ownership and permissions
+RUN chown -R www-data:www-data /var/www
+
+RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port
-EXPOSE 8000
+EXPOSE 10000
 
 # Start application
 CMD ["sh", "-c", "\
 touch database/database.sqlite && \
-chmod -R 777 storage bootstrap/cache database && \
+chown -R www-data:www-data /var/www && \
 php artisan migrate --force && \
-php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+php artisan serve --host=0.0.0.0 --port=10000"]
