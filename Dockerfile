@@ -3,13 +3,13 @@
 # ===========================================
 FROM node:18-alpine AS frontend
 
-WORKDIR /app
+WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
 RUN npm install && npm install pinia
 
-COPY frontend/ ./
+COPY frontend/ .
 
 RUN npm run build
 
@@ -38,17 +38,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy entire backend folder to root
+# Copy backend to root
 COPY backend/ .
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Fix artisan path to vendor
-RUN sed -i "s|/../vendor/autoload.php|/vendor/autoload.php|g" artisan
+# Install dependencies and create symlink
+RUN composer install --no-dev --optimize-autoloader && ln -s /var/www/vendor /var/vendor
 
 # Copy built frontend
-COPY --from=frontend /app/dist ./public/dist
+COPY --from=frontend /app/frontend/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
