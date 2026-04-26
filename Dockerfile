@@ -1,13 +1,15 @@
 # ===========================================
 # Stage 1: Build Frontend (Node 20)
 # ===========================================
-FROM node:20-alpine AS frontend
+FROM node:20-slim AS frontend
 
 WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
-RUN npm ci
+RUN npm cache clean --force
+
+RUN npm install --legacy-peer-deps
 
 COPY frontend/ ./
 
@@ -25,7 +27,7 @@ RUN apk add --no-cache \
     sqlite \
     libsqlite3-dev \
     libxml2 \
-    dom \
+    libxslt \
     unzip \
     git \
     curl
