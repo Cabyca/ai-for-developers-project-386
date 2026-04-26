@@ -34,14 +34,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy backend files
-COPY backend/ .
+# Copy entire project
+COPY . .
 
-# Install dependencies (vendor after COPY)
+# Go into backend folder
+WORKDIR /var/www/backend
+
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader
-
-# Fix artisan path to vendor (after composer install)
-RUN sed -i 's|__DIR__.\x27\/..\/vendor\/autoload.php\x27|__DIR__.\x27\/vendor\/autoload.php\x27|g' artisan
 
 # Copy built frontend
 COPY --from=frontend /app/backend/public/dist ./public/dist
@@ -50,13 +50,10 @@ COPY --from=frontend /app/backend/public/dist ./public/dist
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
 
 # Set ownership and permissions
-RUN chown -R www-data:www-data /var/www && chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www/backend && chmod -R 775 storage bootstrap/cache
 
 # Expose port
 EXPOSE 10000
 
 # Start application
-CMD ["sh", "-c", "\
-touch database/database.sqlite && \
-php artisan migrate --force && \
-php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
