@@ -1,26 +1,22 @@
 # ===========================================
-# Stage 1: Build Frontend (Node 20)
+# Stage 1: Build Frontend (Node 18)
 # ===========================================
-FROM node:20-slim AS frontend
+FROM node:18-alpine AS frontend
 
 WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
-RUN npm cache clean --force
-
-RUN npm install --legacy-peer-deps
-
-RUN npm install pinia --legacy-peer-deps
+RUN npm install
 
 COPY frontend/ ./
 
 RUN npm run build
 
 # ===========================================
-# Stage 2: Production Runtime (PHP 8.3)
+# Stage 2: Production Runtime (PHP 8.2)
 # ===========================================
-FROM php:8.3-cli-alpine
+FROM php:8.2-cli-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -33,7 +29,7 @@ RUN apk add --no-cache \
     curl
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite
+RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring gd zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -41,20 +37,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy dependency files first
-COPY backend/composer.json backend/composer.lock ./
-
-# Install dependencies without scripts
-RUN composer install --no-dev --no-scripts --no-autoloader
-
 # Copy all backend files
 COPY backend/ .
 
-# Generate optimized autoloader
-RUN composer dump-autoloader --optimize
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
 
 # Copy built frontend
-COPY --from=frontend /app/frontend/backend/public/dist ./public/dist
+COPY --from=frontend /app/backend/public/dist ./public/dist
 
 # Create required directories
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
@@ -65,11 +55,10 @@ RUN chown -R www-data:www-data /var/www
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port
-EXPOSE 10000
+EXPOSE 8000
 
 # Start application
 CMD ["sh", "-c", "\
 touch database/database.sqlite && \
-chown -R www-data:www-data /var/www && \
 php artisan migrate --force && \
-php artisan serve --host=0.0.0.0 --port=10000"]
+php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
