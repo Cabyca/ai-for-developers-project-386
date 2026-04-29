@@ -1,5 +1,5 @@
 # ===========================================
-# Stage 1: Build Frontend (Node 20) - Minimal RAM
+# Stage 1: Build Frontend (Node 20)
 # ===========================================
 FROM node:20-alpine AS frontend
 
@@ -18,15 +18,22 @@ RUN npm run build -- --outDir dist && \
     npm cache clean --force
 
 # ===========================================
-# Stage 2: Production Runtime (PHP 8.3)
+# Stage 2: Production Runtime (PHP 8.3-cli)
 # ===========================================
-FROM php:8.3
+FROM php:8.3-cli
 
-WORKDIR /var/www
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libzip-dev \
+    zlib1g-dev \
+    unzip \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install gd zip
+RUN docker-php-ext-install zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
 
 COPY backend/ .
 
