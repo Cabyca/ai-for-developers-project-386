@@ -10,12 +10,11 @@ COPY frontend/ ./
 RUN npm install && npm install pinia && npm run build -- --outDir dist
 
 # ===========================================
-# Stage 2: Production Runtime (PHP 8.3-cli-alpine)
+# Stage 2: Production Runtime (PHP 8.3-cli-bookworm)
 # ===========================================
-FROM php:8.3-cli-alpine
+FROM php:8.3-cli-bookworm
 
-# Install system dependencies
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
@@ -23,11 +22,10 @@ RUN apk add --no-cache \
     libzip-dev \
     unzip \
     git \
-    oniguruma-dev \
-    sqlite
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite sqlite3 gd zip
+    libonig-dev \
+    libsqlite3-dev \
+    && docker-php-ext-install pdo_sqlite sqlite3 gd zip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
