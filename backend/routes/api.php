@@ -27,7 +27,12 @@ Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
 });
 
-// SPA Fallback - должен быть ПОСЛЕДНИМ
+// SPA Fallback - для корневого маршрута /
+Route::get('/', function () {
+    return response()->file(public_path('dist/index.html'));
+});
+
+// SPA Fallback - для любых других маршрутов (должен быть ПОСЛЕДНИМ)
 Route::any('/{any}', function () {
     return response()->file(public_path('dist/index.html'));
 })->where('any', '.*');
