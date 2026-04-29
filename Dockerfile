@@ -23,7 +23,8 @@ RUN apk add --no-cache \
     libzip-dev \
     unzip \
     git \
-    oniguruma-dev
+    oniguruma-dev \
+    libsqlite-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_sqlite sqlite3 gd zip
