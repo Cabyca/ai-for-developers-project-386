@@ -22,7 +22,12 @@ Route::prefix('admin')->group(function () {
     Route::post('/event-types', [EventTypeController::class, 'store']);
 });
 
-// Health check
+// Health check (используется Render)
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
 });
+
+// SPA Fallback - должен быть ПОСЛЕДНИМ
+Route::any('/{any}', function () {
+    return response()->file(public_path('dist/index.html'));
+})->where('any', '.*');
