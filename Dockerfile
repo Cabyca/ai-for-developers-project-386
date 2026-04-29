@@ -23,11 +23,10 @@ RUN apk add --no-cache \
     libzip-dev \
     unzip \
     git \
-    oniguruma-dev \
-    libsqlite-dev
+    oniguruma-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite sqlite3 gd zip
+RUN docker-php-ext-install pdo_sqlite gd zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
