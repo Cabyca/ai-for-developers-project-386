@@ -1,1 +1,0 @@
-/home/alex/ai-for-developers-project-386/backend/bootstrap/app.php
