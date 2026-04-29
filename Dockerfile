@@ -23,7 +23,7 @@ WORKDIR /var/www
 
 COPY backend/ .
 
-RUN rm -f app.php vendor
+RUN rm -f app.php vendor public/app.php
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader --no-interaction
