@@ -1,9 +1,13 @@
 # Stage 1: Build Frontend
 FROM node:20-alpine AS frontend
 WORKDIR /app
+
 COPY frontend/package*.json ./
-RUN npm install
+
+RUN npm install && npm install pinia
+
 COPY frontend/ ./
+
 RUN npm run build -- --outDir dist
 
 # Stage 2: Production Runtime
