@@ -1,7 +1,7 @@
 # ===========================================
-# Stage 1: Build Frontend (Node 18)
+# Stage 1: Build Frontend (Node 20)
 # ===========================================
-FROM node:18-alpine AS frontend
+FROM node:20-alpine AS frontend
 
 WORKDIR /app
 
@@ -10,9 +10,9 @@ COPY frontend/ ./
 RUN npm install && npm install pinia && npm run build -- --outDir dist
 
 # ===========================================
-# Stage 2: Production Runtime (PHP 8.2)
+# Stage 2: Production Runtime (PHP 8.3-cli-alpine)
 # ===========================================
-FROM php:8.2-fpm-alpine
+FROM php:8.3-cli-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -26,7 +26,7 @@ RUN apk add --no-cache \
     oniguruma-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql gd zip
+RUN docker-php-ext-install pdo_sqlite sqlite3 gd zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -54,10 +54,10 @@ COPY --from=frontend /app/dist ./public/dist
 RUN mkdir -p storage bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
 
 # Set ownership and permissions
-RUN chown -R www-data:www-data /var/www && chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www && chmod -R 777 storage bootstrap/cache
 
 # Expose port
-EXPOSE 10000
+EXPOSE 8000
 
 # Start application
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}

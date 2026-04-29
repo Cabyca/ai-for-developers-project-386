@@ -4,7 +4,7 @@ services:
     runtime: docker
     region: Frankfurt
     buildCommand: docker build -t calendar-app .
-    startCommand: sh -c "touch database/database.sqlite && chmod -R 777 storage bootstrap/cache database && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+    startCommand: sh -c "touch /var/www/backend/database/database.sqlite && chmod -R 777 /var/www/storage /var/www/bootstrap/cache /var/www/backend/database && php /var/www/artisan migrate --force && php /var/www/artisan serve --host=0.0.0.0 --port=$PORT"
     healthCheckPath: /api/health
     envVars:
       - key: PORT
@@ -13,9 +13,11 @@ services:
         value: production
       - key: APP_DEBUG
         value: "false"
+      - key: APP_KEY
+        value: base64:hzwqZlathKykpD8On27uE6QsvdyHpPqrtfPB2+rQ788=
       - key: DB_DATABASE
-        value: /app/backend/database/database.sqlite
+        value: /var/www/backend/database/database.sqlite
     disks:
       - name: sqlite-data
-        mountPath: /app/backend/database
+        mountPath: /var/www/backend/database
         sizeGB: 1
